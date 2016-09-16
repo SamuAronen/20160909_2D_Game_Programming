@@ -6,12 +6,24 @@ namespace Runner
 
     public class Spawner : MonoBehaviour
     {
-        [SerializeField] private GameObject[] _spawnPrefabs;
-        [SerializeField] private float _spawnTimeMin;
-        [SerializeField] private float _spawnTimeMax;
+        [SerializeField]
+        private GameObject[] _spawnPrefabs;
+        [SerializeField]
+        private float _spawnTimeMin;
+        [SerializeField]
+        private float _spawnTimeMax;
 
 
-        private void Awake()
+        private SpawnerController _spawnerController;
+
+
+        public void Init(SpawnerController spawnerController)
+        {
+            _spawnerController = spawnerController;
+
+        }
+
+        private void Start()
         {
             Spawn();
         }
@@ -19,12 +31,18 @@ namespace Runner
 
         private void Spawn()
         {
-
-            var prefab = _spawnPrefabs[Random.Range(0, _spawnPrefabs.Length)];
-            Instantiate(prefab, transform.position, Quaternion.identity);
-
+            if (_spawnerController == null)
+            {
+                var prefab = _spawnPrefabs[Random.Range(0, _spawnPrefabs.Length)];
+                Instantiate(prefab, transform.position, Quaternion.identity);
+            }
+            else
+            {
+                var spawnedObject = _spawnerController.GetRandomObject();
+                spawnedObject.transform.position = transform.position;
+            }
             // Hacky method?
-            Invoke("Spawn",Random.Range(_spawnTimeMin,_spawnTimeMax));
+            Invoke("Spawn", Random.Range(_spawnTimeMin, _spawnTimeMax));
         }
     }
 }
