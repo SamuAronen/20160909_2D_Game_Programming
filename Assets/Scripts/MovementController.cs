@@ -56,6 +56,7 @@ namespace Runner
 
             if (!_isGrounded && _hasJumpedOnce && jump)
             {
+                _rigidbody.velocity = new Vector2(_rigidbody.velocity.x,0);
                 performJump();
                 _hasJumpedOnce = false;
             }
